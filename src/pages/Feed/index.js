@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, FlatList,Button , View, ScrollView, TextInput} from 'react-native';
+import { StyleSheet, FlatList, Button , View, ScrollView, TextInput, Image, Text, TouchableOpacity} from 'react-native';
 import axios from 'axios'
 import LazyImage from '../../components/LazyImage';
 import { AsyncStorage } from 'react-native';
+import logo from '../../assets/logo.png';
+import like from '../../assets/like.png';
 
 
 import { Container, Post, Header, Avatar, Name, Description, Loading } from './styles';
+import { useLinkProps } from '@react-navigation/native';
 
-export default function Feed() {
+export default function Feed(props) {
   const [error, setError] = useState('');
   const [feed, setFeed] = useState([]);
   const [page, setPage] = useState(1);
@@ -83,14 +86,13 @@ export default function Feed() {
     loadPage()
   }, []);
 
- 
 
   const renderItem = ({item}) => {
     return (
       <Post>
             <Header>
               <Avatar source={{ uri: item.author.avatar }} />
-              <Name>{item.author.name}</Name>
+              <Name style={styles.boldText} >{item.author.name}</Name>
             </Header>
 
             <LazyImage
@@ -100,38 +102,69 @@ export default function Feed() {
               source={{ uri: item.image }}
             />
 
-            <Description>
-              <Name>{item.author.name}</Name> {item.description}
+            <View style={styles.container}>
+              <View style={styles.spaceImg}>
+                <Image
+                  source={like}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  props.navigation.navigate('Likes')
+                }}
+              >
+                <Text style={styles.textCurt}>
+                  Ver todas as curtidas
+                </Text>
+              </TouchableOpacity>
+            </View>
+           
+            <Description style={styles.textAutor}>
+              <Name style={styles.boldText}>{item.author.name}</Name> {item.description}
             </Description>
+            
+            <TouchableOpacity
+              onPress={() => {
+                props.navigation.navigate('Comments')
+              }}
+            >
+                <Text style={styles.textComent}>
+                  Ver todos os comentários
+                </Text>
+            </TouchableOpacity>
+            
             <Description>
               {comentarios}
             </Description>
-           
 
             <TextInput
               multiline={true}
               onChangeText={(text) => setText(text)}
-              placeholder={"Comentários"}
+              placeholder={"Adicione um comentário"}
               style={[styles.text]}
               maxLength={MAX_LENGTH}
               value={text}/>
 
             <Button
-              title="Salvar"
+              title="Publicar"
               onPress={() => onSave(String(item.id))}
-              accessibilityLabel="Salvar">
+              accessibilityLabel="PUBLICAR">
             </Button>
 
       </Post>
     )
-  }
-  
+}
+
   const handleViewableChanged = useCallback(({ changed }) => {
     setViewable(changed.map(({ item }) => item.id));
   }, []);
 
   return (
     <Container>
+      <Image
+        style={styles.imagem}
+        source={logo}
+      />
       <FlatList
         key="list"
         data={feed}
@@ -152,14 +185,48 @@ export default function Feed() {
   );
 }
 
-const styles = StyleSheet.create(
-  {text: {
-    fontSize: 30,
-    lineHeight: 33,
-    color: "#333333",
-    padding: 16,
-    paddingTop: 16,
-    minHeight: 170,
-    borderTopWidth: 1,
-    borderColor: "rgba(212,211,211, 0.3)"
-}})
+const styles = StyleSheet.create({
+    text: {
+      fontSize: 18,
+      lineHeight: 33,
+      color: "#333333",
+      padding: 16,
+      paddingTop: 16,
+      minHeight: 70,
+      borderTopWidth: 1,
+      borderColor: "rgba(212,211,211, 0.3)"
+    },
+    imagem:{
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      marginTop: 10,
+      marginBottom: 5
+    },
+    boldText:{
+      fontWeight: 'bold',
+      fontSize: 18,
+    },
+    container:{
+      flexDirection: 'row',
+      marginTop: 5,
+      paddingHorizontal: 5,
+      paddingVertical: 5
+    },
+    textAutor:{
+      paddingLeft: 14,
+      fontSize: 17
+    },
+    textCurt:{
+      paddingTop : 7,
+      paddingLeft: 10,
+      fontSize: 18
+    },
+    textComent:{
+      paddingLeft: 14,
+      fontSize: 18
+    },
+    spaceImg:{
+      paddingLeft: 6,
+      paddingTop: 2
+    }
+})

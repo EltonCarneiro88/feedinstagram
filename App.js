@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Login from './src/pages/Authenticate/Login';
 import Register from './src/pages/Authenticate/Register';
-import Feed from './src/pages/Feed/Feed';
+import Feed from './src/pages/Feed';
 import { createStackNavigator } from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native'
 
