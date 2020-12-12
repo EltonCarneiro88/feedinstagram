@@ -4,7 +4,7 @@ import axios from 'axios'
 import LazyImage from '../../components/LazyImage';
 import { AsyncStorage } from 'react-native';
 import logo from '../../assets/logo.png';
-import like from '../../assets/like.png';
+import Like from '../../components/Like';
 
 
 import { Container, Post, Header, Avatar, Name, Description, Loading } from './styles';
@@ -86,7 +86,6 @@ export default function Feed(props) {
     loadPage()
   }, []);
 
-
   const renderItem = ({item}) => {
     return (
       <Post>
@@ -104,9 +103,7 @@ export default function Feed(props) {
 
             <View style={styles.container}>
               <View style={styles.spaceImg}>
-                <Image
-                  source={like}
-                />
+                <Like />
               </View>
               <TouchableOpacity
                 onPress={() => {
@@ -120,7 +117,7 @@ export default function Feed(props) {
             </View>
            
             <Description style={styles.textAutor}>
-              <Name style={styles.boldText}>{item.author.name}</Name> {item.description}
+              <Name style={styles.boldText}>{item.author.name}</Name>  {item.description}
             </Description>
             
             <TouchableOpacity
@@ -132,8 +129,8 @@ export default function Feed(props) {
                   Ver todos os comentários
                 </Text>
             </TouchableOpacity>
-            
-            <Description>
+
+            <Description style={styles.textAutor}>
               {comentarios}
             </Description>
 
@@ -213,8 +210,8 @@ const styles = StyleSheet.create({
       paddingVertical: 5
     },
     textAutor:{
-      paddingLeft: 14,
-      fontSize: 17
+      fontSize: 17,
+      
     },
     textCurt:{
       paddingTop : 7,
